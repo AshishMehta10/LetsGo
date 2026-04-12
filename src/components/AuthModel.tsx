@@ -1,10 +1,19 @@
 "use client";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Circle, CircleDashed, CircleDashedIcon, Lock, Mail, User, X } from "lucide-react";
+import {
+  Circle,
+  CircleDashed,
+  CircleDashedIcon,
+  Lock,
+  Mail,
+  User,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
-import { s } from "motion/react-client";
+import { s, tr } from "motion/react-client";
+import { signIn, useSession } from "next-auth/react";
 type propsTypes = {
   open: boolean;
   onClose: () => void;
@@ -17,6 +26,7 @@ function AuthModel({ open, onClose }: propsTypes) {
   const [step, setStep] = useState<setType>("login");
   const [loading, setLoading] = useState(false);
   const [error, seterror] = useState("");
+  const { data } = useSession();
   const handleSignUp = async () => {
     setLoading(true);
     // Implement sign-up logic here
@@ -30,13 +40,24 @@ function AuthModel({ open, onClose }: propsTypes) {
       setLoading(false);
     } catch (error: any) {
       console.error("Error during sign-up:", error);
-       setLoading(false);
-       seterror(error.response.data.message || "An error occurred during sign-up.");
+      setLoading(false);
+      seterror(
+        error.response.data.message || "An error occurred during sign-up.",
+      );
     }
   };
 
   const handleLogin = async () => {
     // Implement login logic here
+
+    setLoading(true);
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    setLoading(false);
+    console.log("Login successful");
   };
   return (
     <AnimatePresence>
@@ -119,8 +140,19 @@ function AuthModel({ open, onClose }: propsTypes) {
                       />
                     </div>
 
-                    <button className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition">
-                      Log In
+                    <button
+                      className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition"
+                      onClick={handleLogin}
+                    >
+                      {!loading ? (
+                        "Log In"
+                      ) : (
+                        <CircleDashedIcon
+                          size={18}
+                          color="white"
+                          className="animate-spin justify-center"
+                        />
+                      )}
                     </button>
                     <p className="text-center mt-4 text-gray-600">
                       Don't have an account?{" "}
@@ -182,12 +214,23 @@ function AuthModel({ open, onClose }: propsTypes) {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </div>
-{error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+                    {error && (
+                      <p className="text-red-500 mt-2 text-center">{error}</p>
+                    )}
                     <button
-                      className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition flex justify-center items-center" disabled={loading}
+                      className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition flex justify-center items-center"
+                      disabled={loading}
                       onClick={handleSignUp}
                     >
-                      {!loading ? "Sign Up" :<CircleDashedIcon size={18} color="white" className="animate-spin justify-center"/>}
+                      {!loading ? (
+                        "Sign Up"
+                      ) : (
+                        <CircleDashedIcon
+                          size={18}
+                          color="white"
+                          className="animate-spin justify-center"
+                        />
+                      )}
                     </button>
                     <p className="text-center mt-4 text-gray-600">
                       Already have an account?{" "}
