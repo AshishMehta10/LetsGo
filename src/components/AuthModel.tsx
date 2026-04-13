@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Circle,
@@ -23,12 +23,30 @@ function AuthModel({ open, onClose }: propsTypes) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [step, setStep] = useState<setType>("login");
+  const [step, setStep] = useState<setType>("otp");
   const [loading, setLoading] = useState(false);
   const [error, seterror] = useState("");
-  const { data } = useSession();
+  const session = useSession();
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  console.log(session);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [confirmPassword, setConfirmPassword] = useState("");
-  console.log(data);
+  const handleOtpChange = (index: number, value: string) => {
+    if (/^\d*$/.test(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+    
+    if (value !== "" && index < otp.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    // 🔙 Backspace → move previous
+    if (value === "" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }}
+  };
+
   const handleSignUp = async () => {
     if (password !== confirmPassword) {
       seterror("Passwords do not match.");
@@ -42,15 +60,21 @@ function AuthModel({ open, onClose }: propsTypes) {
         email,
         password,
       });
-      console.log("Sign-up successful:", data);
+      console.log(data);
+
       setLoading(false);
     } catch (error: any) {
-      console.error("Error during sign-up:", error);
       setLoading(false);
       seterror(
         error.response.data.message || "An error occurred during sign-up.",
       );
     }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    await signIn("google");
+    setLoading(false);
   };
 
   const handleLogin = async () => {
@@ -63,7 +87,6 @@ function AuthModel({ open, onClose }: propsTypes) {
       redirect: false,
     });
     setLoading(false);
-    console.log("Login successful");
   };
   return (
     <AnimatePresence>
@@ -98,7 +121,10 @@ function AuthModel({ open, onClose }: propsTypes) {
                     Please sign in to book your ride.
                   </p>
                 </div>
-                <button className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-lg font-semibold shadow-lg hover:bg-gray-200 transition">
+                <button
+                  className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-lg font-semibold shadow-lg hover:bg-gray-200 transition"
+                  onClick={handleGoogleLogin}
+                >
                   <Image
                     src={"/google.png"}
                     alt="Google"
@@ -262,6 +288,30 @@ function AuthModel({ open, onClose }: propsTypes) {
                       </span>
                     </p>
                   </div>
+                )}
+                {step === "otp" && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <h1 className="text-2xl font-bold mb-4 tracking-wide text-center">
+                      Enter OTP sent to your email
+                    </h1>
+                    <div className="flex gap-2 justify-center">
+                      {otp.map((digit, i) => (
+                        <input
+                          key={i}
+                          type="text"
+                          ref={(el) => {inputRefs.current[i] = el;}}
+                          maxLength={1}
+                          className="w-12 h-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg"
+                          value={digit}
+                          onChange={(e) => handleOtpChange(i, e.target.value)}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
                 )}
               </div>
             </motion.div>
