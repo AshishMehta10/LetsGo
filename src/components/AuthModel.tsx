@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
-import { s, tr } from "motion/react-client";
+import { button, s, tr } from "motion/react-client";
 import { signIn, useSession } from "next-auth/react";
 type propsTypes = {
   open: boolean;
@@ -313,6 +313,11 @@ function AuthModel({ open, onClose }: propsTypes) {
                           onChange={(e) => handleOtpChange(i, e.target.value)}
                         />
                       ))}
+                    </div>
+                    <div>
+                      <button className="px-3 max-w-xs mt-4 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition justify-center flex items-center mx-auto">
+                        Verify OTP
+                      </button>
                     </div>
                   </motion.div>
                 )}
