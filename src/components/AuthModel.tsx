@@ -36,15 +36,16 @@ function AuthModel({ open, onClose }: propsTypes) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-    
-    if (value !== "" && index < otp.length - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
 
-    // 🔙 Backspace → move previous
-    if (value === "" && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    }}
+      if (value !== "" && index < otp.length - 1) {
+        inputRefs.current[index + 1]?.focus();
+      }
+
+      // 🔙 Backspace → move previous
+      if (value === "" && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    }
   };
 
   const handleSignUp = async () => {
@@ -303,7 +304,9 @@ function AuthModel({ open, onClose }: propsTypes) {
                         <input
                           key={i}
                           type="text"
-                          ref={(el) => {inputRefs.current[i] = el;}}
+                          ref={(el) => {
+                            inputRefs.current[i] = el;
+                          }}
                           maxLength={1}
                           className="w-12 h-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-center text-lg"
                           value={digit}
