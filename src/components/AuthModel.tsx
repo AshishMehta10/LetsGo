@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import axios from "axios";
-import { button, s, tr } from "motion/react-client";
 import { signIn, useSession } from "next-auth/react";
 type propsTypes = {
   open: boolean;
@@ -23,7 +22,7 @@ function AuthModel({ open, onClose }: propsTypes) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [step, setStep] = useState<setType>("otp");
+  const [step, setStep] = useState<setType>("login");
   const [loading, setLoading] = useState(false);
   const [error, seterror] = useState("");
   const session = useSession();
@@ -53,6 +52,7 @@ function AuthModel({ open, onClose }: propsTypes) {
       seterror("Passwords do not match.");
       return;
     }
+
     setLoading(true);
     // Implement sign-up logic here
     try {
@@ -61,13 +61,29 @@ function AuthModel({ open, onClose }: propsTypes) {
         email,
         password,
       });
-      console.log(data);
+      setStep("otp");
 
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
       seterror(
         error.response.data.message || "An error occurred during sign-up.",
+      );
+    }
+  };
+  const handleVerifyOtp = async () => {
+    const enteredOtp = otp.join("");
+    try {
+      const { data } = await axios.post("/api/auth/verifyotp", {
+        email,
+        otp: enteredOtp,
+      });
+      setStep("login");
+      console.log(data);
+    } catch (error: any) {
+      seterror(
+        error.response.data.message ||
+          "An error occurred during OTP verification.",
       );
     }
   };

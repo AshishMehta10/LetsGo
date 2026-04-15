@@ -4,19 +4,22 @@ interface IUser extends Document {
     name: string,
     email: string,
     password?: string,
-    role: "user" |"partner" |"admin",
+    role: "user" | "partner" | "admin",
+    isemailVerified: boolean,
+    otp?: string,
+    otpExpiry?: Date,
     createdAt: Date,
     updatedAt: Date
 }
 
 const userSchema = new mongoose.Schema({
-name: {type: String, required: true},
-email: {type: String, required: true, unique: true},
-password: {type: String},
-role: {type: String, enum: ["user", "partner", "admin"], default: "user"}
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String },
+    role: { type: String, enum: ["user", "partner", "admin"], default: "user" }
 
 
-},{timestamps: true})
+}, { timestamps: true })
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)
 
