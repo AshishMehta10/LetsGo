@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
+import { set } from "mongoose";
 type propsTypes = {
   open: boolean;
   onClose: () => void;
@@ -71,19 +72,22 @@ function AuthModel({ open, onClose }: propsTypes) {
       );
     }
   };
-  const handleVerifyOtp = async () => {
-    const enteredOtp = otp.join("");
+
+  const handleVerifyemail = async () => {
+
+    setLoading(true);
     try {
-      const { data } = await axios.post("/api/auth/verifyotp", {
+      const { data } = await axios.post("/api/auth/verifyemail", {
         email,
-        otp: enteredOtp,
+        otp: otp.join(""),
       });
-      setStep("login");
       console.log(data);
+      setLoading(false);
+      setStep("login");
     } catch (error: any) {
       seterror(
         error.response.data.message ||
-          "An error occurred during OTP verification.",
+          "An error occurred during email verification.",
       );
     }
   };
@@ -331,8 +335,17 @@ function AuthModel({ open, onClose }: propsTypes) {
                       ))}
                     </div>
                     <div>
-                      <button className="px-3 max-w-xs mt-4 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition justify-center flex items-center mx-auto">
-                        Verify OTP
+                      <button className="px-3 max-w-xs mt-4 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition justify-center flex items-center mx-auto" onClick={handleVerifyemail}>
+                        {!loading ? (
+                          "Verify Email"
+                        ) : (
+                          <CircleDashedIcon
+                            size={18}
+                            color="white"
+                            className="animate-spin justify-center"
+                          />
+                        )}
+
                       </button>
                     </div>
                   </motion.div>
