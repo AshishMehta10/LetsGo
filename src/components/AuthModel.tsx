@@ -74,7 +74,6 @@ function AuthModel({ open, onClose }: propsTypes) {
   };
 
   const handleVerifyemail = async () => {
-
     setLoading(true);
     try {
       const { data } = await axios.post("/api/auth/verifyemail", {
@@ -336,7 +335,10 @@ function AuthModel({ open, onClose }: propsTypes) {
                       ))}
                     </div>
                     <div>
-                      <button className="px-3 max-w-xs mt-4 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition justify-center flex items-center mx-auto" onClick={handleVerifyemail}>
+                      <button
+                        className="px-3 max-w-xs mt-4 bg-blue-600 text-white py-2 rounded-lg font-semibold shadow-lg hover:bg-blue-700 transition justify-center flex items-center mx-auto"
+                        onClick={handleVerifyemail}
+                      >
                         {!loading ? (
                           "Verify Email"
                         ) : (
@@ -346,7 +348,6 @@ function AuthModel({ open, onClose }: propsTypes) {
                             className="animate-spin justify-center"
                           />
                         )}
-
                       </button>
                     </div>
                   </motion.div>
