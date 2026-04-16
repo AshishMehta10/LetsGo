@@ -82,6 +82,7 @@ function AuthModel({ open, onClose }: propsTypes) {
         otp: otp.join(""),
       });
       console.log(data);
+      setOtp(["", "", "", "", "", ""]);
       setLoading(false);
       setStep("login");
     } catch (error: any) {
