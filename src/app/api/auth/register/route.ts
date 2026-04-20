@@ -8,7 +8,6 @@ import { sendEmail } from "@/lib/senmail";
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json()
-    console.log(name, email, password)
     await connectDb()
     let user = await User.findOne({ email })
     if (user && user.emailVerified) {
