@@ -33,7 +33,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Provider>
           <ReduxProvider>
-            <InitUser>{children}</InitUser>
+            <InitUser />
+            {children}
           </ReduxProvider>
         </Provider>
       </body>
