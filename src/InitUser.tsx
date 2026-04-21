@@ -5,7 +5,7 @@ import useGetMe from "./hooks/useGetMe";
 
 function InitUser({ children }: { children: ReactNode }) {
   const { status } = useSession();
-  useGetMe({ enabled: status === "authenticated" });
+  useGetMe(status === "authenticated");
   return null;
 }
 

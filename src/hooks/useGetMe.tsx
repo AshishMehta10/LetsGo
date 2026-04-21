@@ -9,12 +9,16 @@ function useGetMe(enabled: boolean) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
     const getMe = async () => {
-      if (!enabled) {
-        return;
+      try {
+        const { data } = await axios.get("/api/auth/user/me");
+        dispatch(setuserdata(data));
+      } catch (error) {
+        console.log(error);
       }
-      const { data } = await axios.get("/api/auth/user/me");
-      dispatch(setuserdata(data));
     };
     getMe();
   }, [enabled]);
