@@ -2,8 +2,13 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Bike, Bus, Car } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { useRouter } from "next/navigation";
 
 function HeroSection({ onAuthRequired }: { onAuthRequired: () => void }) {
+  const { userData } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       <div
@@ -55,7 +60,10 @@ function HeroSection({ onAuthRequired }: { onAuthRequired: () => void }) {
             transition: { duration: 0.1 }, // instant click
           }}
           className="mt-10 px-8 py-4 bg-blue-600 text-white rounded-full font-semibold shadow-lg"
-        onClick={onAuthRequired}>
+          onClick={() => {
+            !userData ? onAuthRequired() : router.push("/user/book");
+          }}
+        >
           Book Now
         </motion.button>
       </div>

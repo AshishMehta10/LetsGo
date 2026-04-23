@@ -49,45 +49,49 @@ function VehicleSlider() {
 
   return (
     <div className="px-4 py-10 flex justify-center">
-      <div className="flex flex-wrap justify-center gap-6 max-w-6xl w-full">
-        {VEHICLE_CATEGORIES.map((vehicle, index) => {
-          const Icon = vehicle.icon;
-          const isActive = index === activeIndex;
+      <div className="flex flex-col items-center max-w-6xl w-full">
+        {/* Cards */}
+        <div className="flex flex-wrap justify-center gap-6 w-full">
+          {VEHICLE_CATEGORIES.map((vehicle, index) => {
+            const Icon = vehicle.icon;
+            const isActive = index === activeIndex;
 
-          return (
-            <motion.div
-              key={vehicle.title}
-              onClick={() => setActiveIndex(index)}
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              className={`w-[220px] p-5 rounded-2xl flex flex-col items-center text-center cursor-pointer transition-all duration-300 border ${
-                isActive
-                  ? "bg-[#1a1a1a] border-white/20 shadow-lg scale-105"
-                  : "bg-[#0f0f0f] border-white/10 hover:scale-105"
-              }`}
-            >
-              {/* Icon */}
-              <div className="p-3 rounded-full mb-3 bg-white/10">
-                <Icon size={28} className="text-white" />
-              </div>
+            return (
+              <motion.div
+                key={vehicle.title}
+                onClick={() => setActiveIndex(index)}
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className={`w-[220px] p-5 rounded-2xl flex flex-col items-center text-center cursor-pointer transition-all duration-300 border ${
+                  isActive
+                    ? "bg-[#1a1a1a] border-white/20 shadow-lg scale-105"
+                    : "bg-[#0f0f0f] border-white/10 hover:scale-105"
+                }`}
+              >
+                <div className="p-3 rounded-full mb-3 bg-white/10">
+                  <Icon size={28} className="text-white" />
+                </div>
 
-              {/* Title */}
-              <h3 className="text-lg font-semibold text-white">
-                {vehicle.title}
-              </h3>
+                <h3 className="text-lg font-semibold text-white">
+                  {vehicle.title}
+                </h3>
 
-              {/* Description */}
-              <p className="text-gray-400 text-sm mt-1 leading-relaxed">
-                {vehicle.desc}
-              </p>
+                <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                  {vehicle.desc}
+                </p>
 
-              {/* Tag */}
-              <span className="mt-3 text-xs px-3 py-1 rounded-full bg-white/10 text-gray-300 border border-white/10">
-                {vehicle.tag}
-              </span>
-            </motion.div>
-          );
-        })}
+                <span className="mt-3 text-xs px-3 py-1 rounded-full bg-white/10 text-gray-300 border border-white/10">
+                  {vehicle.tag}
+                </span>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* ✅ Single Text Below All Cards */}
+        <div className="text-left w-full mt-7 text-black">
+          24/7 Support Available
+        </div>
       </div>
     </div>
   );
