@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion"; // ✅ FIXED
 import Image from "next/image";
-import { redirect, usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthModel from "./AuthModel";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +28,7 @@ function NavBar() {
   const { userData } = useSelector((state: RootState) => state.user);
   const [ProfileOpen, setProfileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const Router = useRouter();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     await signOut({ redirect: false });
@@ -114,7 +115,12 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
 
                           {/* Partner CTA */}
                           {userData.user.role !== "partner" && (
-                            <div className="flex items-center justify-between bg-gradient-to-r from-[#1a1a1a] to-[#222] p-3 rounded-lg cursor-pointer hover:bg-[#2a2a2a] transition-all duration-200">
+                            <div
+                              className="flex items-center justify-between bg-gradient-to-r from-[#1a1a1a] to-[#222] p-3 rounded-lg cursor-pointer hover:bg-[#2a2a2a] transition-all duration-200"
+                              onClick={() =>
+                                Router.push("/partner/onbording/vechile")
+                              }
+                            >
                               <div className="flex items-center gap-3">
                                 <div className="flex items-center">
                                   <Bike
@@ -262,7 +268,10 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
 
                 {/* Partner CTA */}
                 {userData.user.role !== "partner" && (
-                  <div className="flex items-center justify-between bg-gradient-to-r from-[#1a1a1a] to-[#222] p-4 rounded-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md">
+                  <div
+                    className="flex items-center justify-between  from-[#1a1a1a] to-[#222] p-4 rounded-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md"
+                    onClick={() => Router.push("/partner/onbording/vechile")}
+                  >
                     <div className="flex items-center gap-3">
                       <div className="flex items-center">
                         <Bike className="-mr-1 text-yellow-400" size={18} />
