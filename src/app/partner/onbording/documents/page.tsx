@@ -47,7 +47,7 @@ export default function Page() {
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/partner/onbording/vechile")}
             className="p-2 rounded-full hover:bg-gray-100"
           >
             <ArrowLeft size={18} />
