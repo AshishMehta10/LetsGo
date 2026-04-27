@@ -16,13 +16,15 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { setuserdata } from "@/redux/userSlice";
 import { set } from "mongoose";
 
 const NavItems = ["Home", "Bookings", "about us", "contact us"];
 
 function NavBar() {
+  const { data: session } = useSession();
+
   const [authOPen, setAuthOpen] = useState(false);
   const pathname = usePathname();
   const { userData } = useSelector((state: RootState) => state.user);
@@ -92,7 +94,7 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
               ) : (
                 <>
                   <button onClick={() => setProfileOpen((p) => !p)}>
-                    {userData.user.name.charAt(0).toUpperCase()}
+                    {session?.user?.name?.[0]?.toUpperCase() || "?"}
                   </button>
                   <AnimatePresence>
                     {ProfileOpen && (
@@ -106,15 +108,15 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
                           {/* User Info */}
                           <div>
                             <p className="text-lg font-semibold">
-                              {userData.user.name}
+                              {session?.user?.name}
                             </p>
                             <p className="text-sm text-gray-400">
-                              {userData.user.role}
+                              {session?.user?.role}
                             </p>
                           </div>
 
                           {/* Partner CTA */}
-                          {userData.user.role !== "partner" && (
+                          {userData.role !== "partner" && (
                             <div
                               className="flex items-center justify-between bg-gradient-to-r from-[#1a1a1a] to-[#222] p-3 rounded-lg cursor-pointer hover:bg-[#2a2a2a] transition-all duration-200"
                               onClick={() =>
@@ -172,7 +174,7 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
               ) : (
                 <>
                   <button onClick={() => setProfileOpen((p) => !p)}>
-                    {userData.user.name.charAt(0).toUpperCase()}
+                    {userData?.name?.charAt(0).toUpperCase() || "?"}
                   </button>
                 </>
               )}
@@ -258,16 +260,16 @@ shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-2`}
                 {/* User Info */}
                 <div className="text-center">
                   <p className="text-lg font-semibold tracking-wide">
-                    {userData.user.name}
+                    {userData.name}
                   </p>
-                  <p className="text-sm text-gray-400">{userData.user.role}</p>
+                  <p className="text-sm text-gray-400">{userData.role}</p>
                 </div>
 
                 {/* Divider */}
                 <div className="h-px bg-white/10" />
 
                 {/* Partner CTA */}
-                {userData.user.role !== "partner" && (
+                {userData.role !== "partner" && (
                   <div
                     className="flex items-center justify-between  from-[#1a1a1a] to-[#222] p-4 rounded-xl cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md"
                     onClick={() => Router.push("/partner/onbording/vechile")}
