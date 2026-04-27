@@ -19,7 +19,6 @@ const VEHICLE_CATEGORIES = [
 
 function VehicleSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const scrollRef = useRef(null);
 
   // 🔁 Auto Slide
   useEffect(() => {
@@ -33,10 +32,12 @@ function VehicleSlider() {
   }, []);
 
   // 🔄 Scroll to active card
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (scrollRef.current) {
       const container = scrollRef.current;
-      const child = container.children[activeIndex];
+      const child = container.children[activeIndex] as HTMLElement;
 
       if (child) {
         child.scrollIntoView({
