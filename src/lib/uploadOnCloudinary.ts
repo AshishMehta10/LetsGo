@@ -35,4 +35,4 @@ const uploadOnCloudinary = async (file: Blob): Promise<string | null> => {
   }
 };
 
-export default uploadoncloud;
+export default uploadOnCloudinary;
