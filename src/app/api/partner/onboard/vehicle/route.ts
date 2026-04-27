@@ -64,7 +64,9 @@ export async function POST(req: Request) {
         status: "pending",
       });
     }
-
+    if (user.partneronbordingsteps < 1) {
+      user.partneronbordingsteps = 1
+    }
     return Response.json(
       {
         message: "Vehicle saved successfully",
