@@ -28,7 +28,7 @@ function AuthModel({ open, onClose }: propsTypes) {
   const [error, seterror] = useState("");
   const session = useSession();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  console.log(session);
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [confirmPassword, setConfirmPassword] = useState("");
   const handleOtpChange = (index: number, value: string) => {
@@ -80,7 +80,7 @@ function AuthModel({ open, onClose }: propsTypes) {
         email,
         otp: otp.join(""),
       });
-      console.log(data);
+
       setOtp(["", "", "", "", "", ""]);
       seterror("");
       setLoading(false);

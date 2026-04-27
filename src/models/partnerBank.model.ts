@@ -7,7 +7,7 @@ interface IPartnerBank {
   bankName: string;
   accountNumber: string;
   ifscCode: string;
-  upi: string;
+  upi?: string;
 
   branchName?: string;
 
