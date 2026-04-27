@@ -1,9 +1,8 @@
 "use client";
 import { useSession } from "next-auth/react";
-import React, { ReactNode } from "react";
 import useGetMe from "./hooks/useGetMe";
 
-function InitUser({ children }: { children: ReactNode }) {
+function InitUser() {
   const { status } = useSession();
   useGetMe(status === "authenticated");
   return null;
