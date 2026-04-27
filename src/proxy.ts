@@ -3,7 +3,7 @@ import { auth } from "./auth";
 
 const PUBLIC_ROUTE = ["/"];
 const PUBLIC_APIS = ["/api/auth"];
-export async function proxy(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Ignore static files
