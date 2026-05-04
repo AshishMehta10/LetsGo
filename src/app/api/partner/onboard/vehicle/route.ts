@@ -34,7 +34,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ check duplicate globally
     const existingVehicle = await Vehicle.findOne({ number: vehicleNumber });
     if (existingVehicle && existingVehicle.owner.toString() !== user._id.toString()) {
       return Response.json(
@@ -44,18 +43,16 @@ export async function POST(req: Request) {
     }
 
 
-    // ✅ find existing vehicle for this user
     let vehicle = await Vehicle.findOne({ owner: user._id });
 
     if (vehicle) {
-      // update
       vehicle.type = type;
       vehicle.number = vehicleNumber;
       vehicle.vehicleModel = vehicleModel;
       vehicle.status = "pending";
       await vehicle.save();
     } else {
-      // create
+
       vehicle = await Vehicle.create({
         owner: user._id,
         type,
@@ -67,6 +64,8 @@ export async function POST(req: Request) {
     if (user.partneronbordingsteps < 1) {
       user.partneronbordingsteps = 1
     }
+    user.role = "partner"
+    await user.save();
     return Response.json(
       {
         message: "Vehicle saved successfully",
@@ -74,6 +73,29 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
+  } catch (error) {
+    console.error(error);
+    return Response.json({ message: "Server Error" }, { status: 500 });
+  }
+}
+export async function GET(req: Request) {
+  try {
+    await connectDb();
+    const session = await auth();
+    if (!session || !session.user?.email) {
+      return Response.json({ message: "User Not found" }, { status: 400 });
+    }
+    const user = await User.findOne({ email: session.user.email });
+    if (!user) {
+      return Response.json({ message: "User Not found" }, { status: 400 });
+    }
+    let vehicle = await Vehicle.findOne({ owner: user._id });
+    if (vehicle) {
+      return Response.json({ vehicle }, { status: 200 });
+    }
+    else {
+      return null;
+    }
   } catch (error) {
     console.error(error);
     return Response.json({ message: "Server Error" }, { status: 500 });
